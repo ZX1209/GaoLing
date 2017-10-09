@@ -146,7 +146,7 @@ int storelist(list L)
   
 }
 
-int readlist(list L,const char* path="liststoretest.txt")
+int readlist(list L,const char* path="liststoretest.txt") 
 { 
   FILE* fd;
   int tempelement;
@@ -164,6 +164,10 @@ int readlist(list L,const char* path="liststoretest.txt")
 
   }
 
+
+  ////////////////
+  //do close it !!
+  /////////////////
   fclose(fd);
   return 1;
   
