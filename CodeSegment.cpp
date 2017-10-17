@@ -22,7 +22,7 @@ float InvSqrt(float x)
 	return x;
 }
 */
-
+//system sqrt();
 float Sqrt(float X)
 {
 
@@ -45,7 +45,7 @@ float Q_rsqrt( float number )
 
     #ifndef Q3_VM
     #ifdef __linux__
-         assert( !isnan(y) ); // bk010122 - FPE?
+         //assert( !isnan(y) ); // bk010122 - FPE?
     #endif
     #endif
     return y;
