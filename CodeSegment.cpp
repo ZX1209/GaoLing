@@ -61,3 +61,27 @@ int IsPrimer(int N)
   }
   return 1;
 }
+
+///////////////////////////////////
+//to read the argv   yes!!!!
+////////////////////////////////////
+#include <stdio.h>
+
+int main(int argc,char * argv[])
+{
+	int i=0;
+	//confirm every argv and it's next
+	for(i=1;i<argc-1;i++)
+	{
+		//the argv is the std argv while the next not
+		//so it is the correct one
+		if(argv[i][0]=='-'&&argv[i][1]=='-'&&!(argv[i+1][0]=='-'&&argv[i+1][1]=='-'))
+				printf("%s:%s\n",(argv[i]+2),argv[i+1]);
+
+	}
+
+
+	return 0;
+
+}
+

@@ -40,6 +40,53 @@ int TreeDeep(int i)
   return 0;
 }
 
+//////////////////////
+//find the father of node N
+//-1 for not found!
+//////////////////////
+int FindFather(int N)
+{
+  for(int i=0;i<16;i++)
+  {
+    if (tree[i][0]==N||tree[i][1]==N) {
+      return i+1;
+    }
+  }
+
+  return -1;
+}
+
+int ArraySwap(int* A,int* B)
+{
+  int tmp=0;
+  for (int i = 0; i < 32; i++) {
+    tmp=A[i];
+    A[i]=B[i];
+    B[i]=tmp;
+  }
+
+
+}
+
+
+int Width(int N)
+{
+  int work[32]={0};
+  int tmp[32]={0};
+  work[0]=1;
+  int j=0;
+  int k=0;
+
+  for (int i = 0; i < N; i++) {
+    for (int j = 0,int k=0; j < 32; j++) {
+      tmp[k++]=tree[j][0];
+      tmp[k++]=tree[j][1];
+    }
+    
+    
+  }
+}
+
 
 int main()
 {
@@ -51,7 +98,9 @@ int main()
     cin>>tree[i][0]>>tree[i][1];
   }
 
-  cout<<findx(3);
+  cout<<FindFather(4);
+
+  //cout<<findx(3);
 
 
 
