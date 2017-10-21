@@ -11,6 +11,16 @@
 using namespace std;
 
 
+int Max(int A,int B)
+{
+  if (A>=B) {
+    return A;
+  }
+  else 
+  return B;
+  
+}
+
 int tree[16][2]={0};
 
 int findx(int x)
@@ -24,21 +34,20 @@ int findx(int x)
   return i+1;
 }
 
+/////////////////////////
+//
 int TreeDeep(int i)
 {
-  if (tree[i-1][0]==0) {
+  if (i==0) {
+    return 0;
+  }else if (tree[i-1][0]==0&&tree[i-1][1]==0) {
     return 1;
   }
-  else {
-    TreeDeep(tree[i-1][0]);
-  }
 
-  if (tree[i-1][1]==0) {
-    return 0;
-  }
-  cout<<tree[i][0]<<tree[i][1];
-  return 0;
+  return Max(TreeDeep(tree[i-1][0]),TreeDeep(tree[i-1][1]))+1;
 }
+
+
 
 //////////////////////
 //find the father of node N
@@ -56,7 +65,12 @@ int FindFather(int N)
   return -1;
 }
 
-int ArraySwap(int* A,int* B)
+///////////////////////////
+//copy array B to array A
+//only for 32 int array 
+//i will improve it
+//////////////////////////
+void ArraySwap(int* A,int* B)
 {
   int tmp=0;
   for (int i = 0; i < 32; i++) {
@@ -71,26 +85,33 @@ int ArraySwap(int* A,int* B)
 
 int Width(int N)
 {
-  int work[32]={0};
+  int work[32]={1};
   int tmp[32]={0};
-  work[0]=1;
-  int j=0;
+  int count=0;
   int k=0;
-
-  for (int i = 0; i < N; i++) {
-    for (int j = 0,int k=0; j < 32; j++) {
-      tmp[k++]=tree[j][0];
-      tmp[k++]=tree[j][1];
+  for (int j = 0; j < N; j++) {
+   for (int i = 0; i < 32; i++) {
+    if (work[i]!=0) {
+      tmp[k++]=tree[work[i]-1][0];
+      tmp[k++]=tree[work[i]-1][1];
     }
-    
-    
+   }
+   ArraySwap(work,tmp);
+   k=0;
   }
-}
 
+  for (int i = 0; i < 32; i++) {
+    if (work[i]!=0) {
+      count++; 
+    }
+  }
+  return count;
+}
 
 int main()
 {
   int n;
+  int maxwidth=0;
   cin>>n;
 
 
@@ -98,8 +119,14 @@ int main()
     cin>>tree[i][0]>>tree[i][1];
   }
 
-  cout<<FindFather(4);
+  //cout<<FindFather(4)<<endl;
 
+  for (int i = 0; i < n ; i++) {
+    if (maxwidth<Width(i)) {
+      maxwidth=Width(i);
+    }
+  }
+  cout<<maxwidth<<" "<<TreeDeep(1)<<endl;
   //cout<<findx(3);
 
 
