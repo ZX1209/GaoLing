@@ -11,10 +11,10 @@
 using namespace std;
 ///////////////////////////////
 //show number [Start+0,Start+N-1]
-void ShowArray(int Start[],int N)
+void ShowArray(int Start[][2],int N)
 {
   for (int i = 0; i < N; i++) {
-    cout<<Start[i]<<" ";
+    cout<<Start[i][0]<<" "<<Start[i][1]<<";";
   }
   cout<<endl;
 }
@@ -60,6 +60,31 @@ int FindMinNext(int Start[][2],int Len[],int p,int Max)
   return minn;
 }
 
+void Sort(int Start[][2],int N)
+{
+  int first,second;
+  int minn;
+  int min;
+  for (int i = 0; i < N; i++) {
+    int min=Start[i][0];
+    int minn=i;
+    for (int j = i; j < N; j++) {
+      if (min>Start[j][0]) {
+        min=Start[j][0];
+        minn=j; 
+      }
+    }
+    first=Start[minn][0];
+    second=Start[minn][1];
+    Start[minn][0]=Start[i][0];
+    Start[minn][1]=Start[i][1];
+    Start[i][0]=first;
+    Start[i][1]=second;
+
+  }
+
+}
+
 int main()
 {
   int N;
@@ -69,7 +94,7 @@ int main()
   int len[100]={0};
   int min,max;
   int minn,maxn;
-  int cout=0;
+  int count=0;
   cin>>N;
   for (int i = 0; i < N; i++) {
     cin>>Lines[i][0]>>Lines[i][1];
@@ -105,10 +130,24 @@ int main()
     }
   }
 
-  ShowArray(&num[999],10);
-  ShowArray(len,N);
+  //ShowArray(Lines,N);
+  Sort(Lines,N);
+  //ShowArray(Lines,N);
+
+  int left=Lines[N-1][0];
+  count++;
+
+  for (int i = N-1; i>=0; i--) {
+    if (Lines[i][1]<=left) {
+
+      left=Lines[i][0];
+      count++;
+      
+    }
+  }
 
 
+  cout<<count;
   //wwhile(FindMinNext(Lines,i,max)!=maxn);
 
 
