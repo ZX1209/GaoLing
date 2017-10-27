@@ -10,8 +10,35 @@
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
-#include <cmath>
+#include <cmath>   
+#include <iomanip>
 using namespace std;
+
+////////////////////////////////////////////
+//likes the normal number
+//1234 means 1*1+2*10+3*100+4*10000
+//the big number use base like this
+//[1234,123,1]  means 1234*1+123*100000000+1*100000000*100000000
+//when it comes to the plus action
+//123+400 means (1+0)*1+(2+0)*10+(1+4)*100
+//so like the bignum
+//[1,2]+[23,4]  means (1+23)*1+(2+4)*100000000 
+//so as minux and mutilplication
+////////////////////////////////////////////
+
+
+
+
+#define MAX_NUMBER_DIGITAL 500
+#define DIGITAL_PER_UNIT 8
+#define MAX_UNIT_NUM MAX_NUMBER_DIGITAL/DIGITAL_PER_UNIT+1 
+
+long long spow(int i)
+{
+	long long L=1;
+	while(i--) L=L*100000000;
+	return L;
+}
 
 
 ////////////////
@@ -21,10 +48,25 @@ using namespace std;
 class BigNum
 {
 	public:
+		void reset()
+		{
+			memset(data,0,sizeof(data));
+			wei=0;
+			
+		}
 		BigNum()
 		{
 			memset(data,0,sizeof(data));
 			wei=0;
+		}
+		
+		BigNum(BigNum& other)
+		{
+			wei=other.wei;
+			for(int  i=0;i<MAX_UNIT_NUM;i++)
+			{
+				data[i]=other.data[i];
+			}
 		}
 		
 		BigNum(char *Start)
@@ -60,43 +102,47 @@ class BigNum
 		
 			
 			
-			int i=63;
-			while(data[--i]==0);
-			wei=i;
+
 			
 			convert();
 		}
 		
 		void convert()
 		{
-			for(int i=0;i<63;i++)
+			for(int i=0;i<MAX_UNIT_NUM;i++)
 			{
-				int tmp=data[i]/100000000;
+				long long tmp=data[i]/100000000;
 				if(tmp)
 				{
 					data[i+1]+=tmp;
 					data[i]=data[i]%100000000;
 				}
 			}
+			
+			int i=MAX_UNIT_NUM;
+			while(data[--i]==0);
+			wei=i;
 		}
 		
 		void show()
 		{
-			int i=63;
+			int i=MAX_UNIT_NUM;
 			while(data[--i]==0);
+			
+			cout<<data[i--];
 			
 			while(i>=0)
 			{
-				cout<<data[i--];
+				cout<<setfill('0')<<setw(8)<<data[i--];
 			}
 			cout<<endl;
 		}
 		
 		void getone(int i)
 		{
-			if(data[i+1])
+			if(data[i+1]>0)
 			{
-				data[i+1]--;
+				data[i+1]-=1;
 				data[i]+=100000000;
 				
 			}
@@ -123,7 +169,7 @@ class BigNum
 	//is 342344322312312
 	//usually the low level is full(whit 8 bit)
 	////////////////////////////////////
-	unsigned long long	data[63];	
+	unsigned long long	data[MAX_UNIT_NUM];	
 		
 	int wei;
 		
@@ -135,8 +181,9 @@ class BigNum
 //asume that A is Bigger!!!!!
 BigNum operator+(BigNum &A,BigNum &B)
 {
+	int limit=A.wei>B.wei?A.wei:B.wei;
 	BigNum tmp;
-	for(int i=0;i<=A.wei;i++)
+	for(int i=0;i<=limit;i++)
 	{
 		tmp.data[i]=A.data[i]+B.data[i];
 	} 
@@ -177,6 +224,33 @@ int operator>(BigNum &A,BigNum &B)
 	}
 }
 
+//A is bigger then B
+BigNum operator*(BigNum &A,BigNum &B)
+{
+	BigNum FuckA;
+	BigNum FuckB;
+	for(int i=0;i<=A.wei;i++)
+	{
+		for(int j=0;j<=B.wei;j++)
+		{
+			FuckB.data[i+j]=A.data[i]*B.data[j];
+			
+		}
+		
+		FuckB.convert();
+		FuckA=FuckB+FuckA;
+		FuckA.convert();
+		FuckB.reset();
+		
+	} 
+	
+	return FuckA;
+	
+	
+}
+
+
+
 
 //////////////////////////////////////
 //A is biger than B
@@ -186,10 +260,10 @@ BigNum operator-(BigNum &A,BigNum &B)
 	BigNum tmp;
 	long long tmpll=0;
 	long long test;
-	for(int i=0;i<63;i++)
+	for(int i=0;i<=A.wei;i++)
 	{                
 	    tmpll=A.data[i]-B.data[i];
-		if(tmpll>0)
+		if(tmpll>=0)
 		{
 			tmp.data[i]=tmpll;
 		}
@@ -206,29 +280,7 @@ BigNum operator-(BigNum &A,BigNum &B)
 	
 }
 
-void CharConvert(char* Start)
-{
-  for (int i = 500; i >0; i--) {
-    int flag=(Start[i]-'0')/10;
-    if (flag) {
-      Start[i-1]+=flag;
-      Start[i]=(Start[i]-'0')%10+'0';
-    }
-  }
-}
 
-
-
-void Convert(unsigned long long* Start)
-{
-  for (int i = 0; i < 208; i++) {
-    int flag=Start[i]/999999999999999999;
-    if (flag) {
-      Start[i+1]+=flag;
-      Start[i]=Start[i]-flag*999999999999999999;
-    }
-  }
-}
 
 
 
@@ -264,21 +316,25 @@ int read(unsigned long long* Start)
 
 int main()
 {
-	char tmpa[501]={'\0'};
-	char tmpb[501]={'\0'};
+	///////////////////////////////////////
+	//FRO -{500 DIGITAL} TO {500 DIGITAL}
+	////////////////////////////////////////
+	char tmpa[MAX_NUMBER_DIGITAL+1]={'\0'};
+	char tmpb[MAX_NUMBER_DIGITAL+1]={'\0'};
 	scanf("%s %s",tmpa,tmpb);
 	
 	BigNum A(tmpa);
 	BigNum B(tmpb); 
-	A.show();
-	B.show();
-	if((A>B)==1)
+	//A.show();
+	//B.show();
+	if((A>B)>=0)
 	{
-		(A+B).show();
+		(A*B).show();
 	}
-	else
+	else 
 	{
-		(B+A).show();
+		//cout<<"-";
+		(B*A).show();
 	}
 	
 
