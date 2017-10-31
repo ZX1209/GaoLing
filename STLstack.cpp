@@ -5,55 +5,51 @@
 using namespace std;
 
 
-void MessageLoop()
-{
-	char opt='\0';
-	char str[100]={'\0'};
-	scanf("%c %s",&opt,str);
-	switch(opt)
-	{
-		case 'p':
-			printf("%s\n",str);
-			break;
-		case 'b':
-			printf("this is what you want??\n");
-			break;
-		default:
-			printf("not correct!\n");
-			
-			break;
-	}
-	
-	
-} 
-
 int main()
 {
+	stack<int> test;
+	
+	
 	char opt='\0';
-	char str[100]={'\0'};
-	int i=0;
+	int tmp=0;
+	int flag=1;
 	
 	char c;
-	while(1)
+	while(flag)
 	{
 		
-		if(scanf("command:%c;",&opt)==1)
+		if(scanf("opt:%c;",&opt)==1)
 		{
 			switch(opt)
 			{
 				case 'p':
-					getchar();
+					printf("push:");
+					scanf("%d;",&tmp);
+					test.push(tmp);
 					
-					while((c=getchar())!='\n'&&c!=EOF){
-						str[i++]=c;
-					 }
-					 str[i]='\0';
-					 i=0;
-					printf("%s\n",str);
 					break;
-				case 'b':
-					printf("this is what you want??\n");
+				case 'o':
+					if(!test.empty())
+					test.pop();
 					break;
+				case 's':
+				    cout<<test.size()<<endl;
+					break;
+					
+				case 'e':
+					cout<<test.empty()<<endl;
+					break;
+					
+				case 't':
+					
+					if(!test.empty())
+					cout<<test.top();
+					printf("not correct!\n");
+					
+					break;
+				case 'q':
+					flag=0;
+					
 				default:
 					printf("not correct!\n");
 					
@@ -66,7 +62,6 @@ int main()
 		}
 		
     }
-	
-	
+
 	return 0;
 } 
