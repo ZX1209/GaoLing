@@ -1,5 +1,5 @@
 #include <GL/glut.h>
-//#include <GL/gl.h>
+#include <GL/gl.h>
 //#include <GL/glu.h>
 #include <stdlib.h> 
 
@@ -25,9 +25,25 @@ void init ( void )
 /*调用GLUT函数，绘制一个球*/
 void display ( void )
 {
+   glClearColor(0.0,0.0,0.0,1.0);
+
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glutSolidSphere (1.0, 40, 50);
+    //glutSolidSphere (1.0, 40, 50);
+
+
+    glBegin(GL_QUADS);
+
+    glVertex2f(0.5,1);
+    glVertex2f(0.5,0.5);
+    glVertex2f(1,0.5);
+    glVertex2f(1,1);
+
+
+    glEnd();
+
+
     glFlush ();
+    glutSwapBuffers();
 }
 
 
@@ -66,13 +82,13 @@ int main(int argc, char** argv)
     /* 显示模式初始化 */
     glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
     /* 定义窗口大小 */
-    glutInitWindowSize (300, 300);
+    glutInitWindowSize (500, 300);
     /* 定义窗口位置 */
     glutInitWindowPosition (100, 100);
     /* 显示窗口，窗口标题为执行函数名 */
     glutCreateWindow ( argv [ 0 ] );
     /* 调用OpenGL初始化函数 */
-    init ( );
+   // init ( );
     /* 注册OpenGL绘图函数 */
     glutDisplayFunc ( display );
     /* 注册窗口大小改变时的响应函数 */
