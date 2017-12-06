@@ -38,8 +38,8 @@ unsigned int MaxEnergy(int i, int j)
 	int end =heads[prep(i)];
 	
 	//向下找出最大的
-	unsigned int max=MaxEnergy(i,nextp(i))+MaxEnergy(nextp(i,2),j)+head*end*heads[nextp(i)];
-	for(int m=nextp(i);m!=j;m++)
+	unsigned int max=MaxEnergy(i,i)+MaxEnergy(nextp(i),j)+head*end*heads[i];
+	for(int m=nextp(i);m!=j;m=nextp(m))
 	{
 		int temp=MaxEnergy(i,m)+MaxEnergy(nextp(m),j)+head*end*heads[m];
 		
@@ -71,7 +71,7 @@ int main()
 			//obvious 
 			if(i==j) dp[i][j]=0;
 			//if j is the next of i then it gets it own value
-			if(nexp(i)/*next position*/==j) dp[i][j]=heads[prep(i)]*heads[i]*heads[j];
+			if(nextp(i)/*next position*/==j) dp[i][j]=heads[prep(i)]*heads[i]*heads[j];
 			 
 		}
 		
@@ -80,7 +80,7 @@ int main()
 	int Max=MaxEnergy(0,N-1);
 	for(int i=1;i<N;i++)
 	{
-		unsigned int temp=MaxEnergy(i,prep(i));;
+		unsigned int temp=MaxEnergy(i,prep(i));
 		
 		if(temp>Max) Max=temp; 
 	} 
