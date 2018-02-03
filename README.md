@@ -1,4 +1,4 @@
 # GaoLing
 
-这是个人的c库,及linux bash 工具集
 
+一些C/C++ 习题代码
