@@ -39,6 +39,62 @@ void end_sign()
 } 
 
 
+ //init value
+ int n;
+ int k;
+ int x[20];
+ int total=0;
+ int repeat_time=1;
+
+inline int isprimer(int number)
+{
+	for(int i=2;i<=sqrt(number);i++)
+	{
+		if(number%i==0) return 0;
+	}
+	return 1;
+	
+}
+
+void dfs(int pos,int sum,int get)
+{
+	if(get==k||pos==n)
+	{
+		if(get==k&&isprimer(sum)) total++;
+		return;
+	}
+	
+	dfs(pos+1,sum+x[pos],get+1);
+	dfs(pos+1,sum,get); 
+	return;
+}
+
+
+
+void chose_loop(int step,int sum,int pos)
+{
+	int tmpval=x[pos];
+	sum+=x[pos];
+	x[pos]=0;
+	
+	
+	if(step==k)
+	{
+		if(isprimer(sum)) total++;
+	}
+	else
+	{
+		for(int i=0;i<n;i++)
+		{
+			if(x[i]!=0) chose_loop(step+1,sum,i);	
+		}
+		
+	}
+	
+	x[pos]=tmpval;
+}
+
+
 
 
 int main()
@@ -53,18 +109,20 @@ int main()
 	 start_sign();
 	 #endif
 	 
-	 //init value
-	 int n=0;
-	 int F[501];
-	 F[0]=1;
-	 F[1]=2;
-	 F[2]=4;
-	 
+
 	 
 	 //ÊäÈë input
-	 scanf("%d",&n);
-	 if(n%2) n=n-1;
-	 n/=2;
+	 scanf("%d %d ",&n,&k);
+	 for(int i=0;i<n;i++)
+	 {
+	 	scanf("%d",x+i);	
+	 }
+	 for(int i=1;i<=k;i++)
+	 {
+	 	repeat_time*=i;
+	 }
+	 
+	 
 	 
      //detail time
 	 #ifdef DETAILS
@@ -72,13 +130,7 @@ int main()
 	 #endif
 	 
 	 //running program
-	 for(int i=2;i<=n;i++)
-	 {
-	 		F[i]=F[i-1]+F[i/2];	
-	 	
-	 }
-	 
-	 printf("%d",F[n]);
+	 dfs(0,0,0);
 	 
 
 	 //detail time
@@ -88,6 +140,7 @@ int main()
 	 #endif	 
 	 
 	 //Êä³ö output
+	 printf("%d",total);
 	 
 
 	 
