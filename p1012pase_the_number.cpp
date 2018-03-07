@@ -39,19 +39,7 @@ void end_sign()
 } 
 
 bool cmp(string a,string b){
-	if(a[0]==b[0])
-	{
-		if(a.length()==b.length()){
-			return a>b;
-		}
-		else{
-			return a.length()<b.length();
-		}
-	}
-	else{
-		return a[0]>b[0];
-		
-	}
+	return a+b>b+a;
 }
 
 
