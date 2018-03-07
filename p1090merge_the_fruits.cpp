@@ -40,6 +40,14 @@ void end_sign()
 
 
 
+struct node{
+	int w;
+	
+	bool operator< (const node& a) const
+	{
+		return a.w<w;
+	}
+};
 
 int main()
 {
@@ -55,11 +63,11 @@ int main()
 	 
 	 //init value
 	 int n;
-	 list<int> L;
-	 list<int>::iterator it;
-	 list<int>::iterator min1;
-	 list<int>::iterator min2;
+	 
+	 priority_queue<node> Q;
 	 int min;
+	 node tmpnode;
+	 node p,q;
 	 long result=0;
 	 
 	 scanf("%d",&n);
@@ -67,10 +75,22 @@ int main()
 	 for(int i=0;i<n;i++)
 	 {
 	 	scanf("%d",&min);
-	 	L.push_back(min);
+	 	tmpnode.w=min;
+	 	Q.push(tmpnode);
 	 }
 	 
 	 //ÊäÈë input
+	 while(Q.size()>1){
+	 	p=Q.top();
+	 	Q.pop();
+	 	q=Q.top();
+	 	Q.pop();
+	 	
+	 	p.w+=q.w;
+	 	result+=p.w;
+	 	Q.push(p);
+	 	
+	 }
 
 	 
 	 
@@ -80,40 +100,41 @@ int main()
 	 clock_running_start_time=clock();
 	 #endif
 	 
-	 while(L.size()>1)
-	 {
-//	 	L.sort();
-//	 	min1=L.begin();
-//	 	min2=++min1;
-//		min1--;
-//	 	*min1+=*min2;
-//	 	result+=*min1;
-//	 	L.erase(min2);
+	 
+//	 while(L.size()>1)
+//	 {
+////	 	L.sort();
+////	 	min1=L.begin();
+////	 	min2=++min1;
+////		min1--;
+////	 	*min1+=*min2;
+////	 	result+=*min1;
+////	 	L.erase(min2);
 
-		for(it=L.begin();it!=L.end();it++)
-		{
-			cout<<*it<<" ";
-		}
-		cout<<endl;
-		
-		min2=min1=L.begin();
+//		for(it=L.begin();it!=L.end();it++)
+//		{
+//			cout<<*it<<" ";
+//		}
+//		cout<<endl;
+//		
+//		min2=min1=L.begin();
 
-		for(it=L.begin();it!=L.end();it++)
-		{
-			if(*it<*min1) min1=it;
-		}
-		
-		for(it=L.begin();it!=L.end();it++)
-		{
-			if(*it<*min2&&min2!=min1) min2=it;
-		}
-		
-		*min1=*min1+*min2;
-		result=result+*min1;
-		L.erase(min1);
-		
-		
-	 }
+//		for(it=L.begin();it!=L.end();it++)
+//		{
+//			if(*it<*min1) min1=it;
+//		}
+//		
+//		for(it=L.begin();it!=L.end();it++)
+//		{
+//			if(*it<*min2&&min2!=min1) min2=it;
+//		}
+//		
+//		*min1=*min1+*min2;
+//		result=result+*min1;
+//		L.erase(min1);
+//		
+//		
+//	 }
 	 
 	 
 	 //detail time
