@@ -1,0 +1,170 @@
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+#include<cmath>
+#include<vector>
+#include<set>
+#include<list>
+#include<stack>
+#include<map>
+#include<queue>
+#include<string>
+#include<bitset>
+
+#include<ctime>
+#include<cstdlib>
+
+using namespace std;
+
+#define DETAILS
+
+
+clock_t clock_start_time;
+clock_t clock_end_time; 
+
+clock_t clock_running_start_time;
+clock_t clock_running_end_time;
+
+int random_value;
+
+void start_sign()
+{
+	printf("\n==start==\n");
+} 
+
+
+void end_sign()
+{
+	printf("\n==end===\n");
+} 
+
+
+//init value
+int N=0;
+int result=0;
+
+int tmpmark[14]={0};
+int tmpset[14]={0};
+
+
+void process(int c)
+{
+	if(c>=N)
+	{
+		for(int i=1;i<=N;i++) 
+		{
+			for(int j=i;j<=N;j++) 
+			{
+				if((tmpmark[i]-tmpmark[j])==(i-j)) return ;
+				
+			}
+				
+		}
+		
+		result++;
+		if(result<=3)
+		{
+			for(int i=1;i<=N;i++)
+			{
+				printf("%d ",tmpmark[i]);
+			}
+			printf("\n");
+			
+		}
+		
+		return ;
+	} 
+	
+	
+	
+	for(int i=1;i<=N;i++)
+	{
+		if(tmpset[i]!=1)
+		{
+			//flag set
+			tmpset[i]=1;
+			
+			//mark level number
+			tmpmark[c+1]=i;
+			
+			//next level
+			//printf("level:%d insert:%d\n",c,i);
+			process(c+1);
+			
+			//unset flag
+			tmpset[i]=0;
+			
+			//for security
+			tmpmark[c+1]=0;
+			
+			
+		}	
+	}
+	 
+	
+	return;
+}
+
+
+
+int main()
+{
+	#ifdef DETAILS
+	 clock_start_time=clock();
+	 
+	 //random value
+	 srand(time(NULL));
+	 random_value=rand();
+	 
+	 start_sign();
+	 #endif
+	 
+
+	 
+	 
+	 
+	 //ÊäÈë input
+	 scanf("%d",&N);
+	 
+     //detail time
+	 #ifdef DETAILS
+	 clock_running_start_time=clock();
+	 #endif
+	 
+	 //running program
+	 process(0);
+
+	 //detail time
+	 clock();
+	 #ifdef DETAILS
+	 clock_running_end_time=clock();
+	 #endif	 
+	 
+	 //Êä³ö output
+	 
+	 printf("%d",result);
+	 
+
+	 
+	 
+	 
+	 
+	 
+	#ifdef DETAILS 
+	clock_end_time=clock();
+	 
+	//convert cpu time to (ms)
+	double cpu_time_used=1000.0*(clock_end_time-clock_start_time)/CLOCKS_PER_SEC;
+	
+	double cpu_time_running=1000.0*(clock_running_end_time-clock_running_start_time)/CLOCKS_PER_SEC;
+	
+	end_sign();
+	printf("\ntotal cpu_time_used:%f ms",cpu_time_used);
+	printf("\nrunning cpu_time_used:%lf ms",cpu_time_running);
+	#endif	
+	 
+	
+	return 0;
+} 
+
+
