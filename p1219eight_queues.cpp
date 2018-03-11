@@ -45,47 +45,248 @@ int result=0;
 
 int tmpmark[14]={0};
 int tmpset[14]={0};
+int rightmark[27];
+int leftmark[27];
+//int resultmark[4][14];
+
+
+//输入 原坐标
+// 
+inline int leftmarkf(int x,int y)
+{
+	int rx;
+	int ry;
+	if(x>=y)
+	{
+		rx=x-(y-1);
+		ry=y-(y-1);
+		if(leftmark[rx]!=0)
+		{
+			return 1;
+		}
+		else{
+			leftmark[rx]=1;
+			return 0;
+		}
+		
+	}
+	else
+	{
+		rx=x-(x-1);
+		ry=y-(x-1);
+		if(leftmark[ry+N]!=0)
+		{
+			return 1;
+		}
+		else{
+			leftmark[ry+N]=1;
+			return 0;
+		}
+		
+	}
+	
+	
+}
+
+//输入原坐标
+//输出对应斜行的值,
+//0 表示无
+//1 表示有 
+inline int leftsetf(int x,int y)
+{
+	int rx;
+	int ry;
+	if(x>=y)
+	{
+		rx=x-(y-1);
+		ry=y-(y-1);
+		return leftmark[rx];
+		
+	}
+	else
+	{
+		rx=x-(x-1);
+		ry=y-(x-1);
+		return leftmark[ry+N];
+		
+	}
+	
+	
+}
+
+inline int rightsetf(int x,int y)
+{
+	int rx;
+	int ry;
+	if((9-x)>=y)
+	{
+		rx=x+(y-1);
+		ry=y-(y-1);
+		return rightmark[rx];
+		
+	}
+	else
+	{
+		rx=x+(N-x);
+		ry=y-(N-x);
+		return rightmark[ry+N];
+		
+	}
+	
+	
+	
+}
+
+
+inline int rightmarkf(int x,int y)
+{
+	int rx;
+	int ry;
+	if((9-x)>=y)
+	{
+		rx=x+(y-1);
+		ry=y-(y-1);
+		if(rightmark[rx]!=0)
+		{
+			return 1;
+		}
+		else{
+			rightmark[rx]=1;
+			return 0;
+		}
+		
+	}
+	else
+	{
+		rx=x+(N-x);
+		ry=y-(N-x);
+		if(rightmark[ry+N]!=0)
+		{
+			return 1;
+		}
+		else{
+			rightmark[ry+N]=1;
+			return 0;
+		}
+		
+	}
+	
+	
+	
+}
+
+inline void lefterasef(int x,int y)
+{
+	int rx;
+	int ry;
+	if(x>=y)
+	{
+		rx=x-(y-1);
+		ry=y-(y-1);
+		leftmark[rx]=0;
+		return ;
+		
+	}
+	else
+	{
+		rx=x-(x-1);
+		ry=y-(x-1);
+		leftmark[ry+N]=0;
+		return;
+		
+	}
+	
+	
+}
+
+inline void righterasef(int x,int y)
+{
+	int rx;
+	int ry;
+	if((9-x)>=y)
+	{
+		rx=x+(y-1);
+		ry=y-(y-1);
+		rightmark[rx]=0;
+		return ;
+		
+	}
+	else
+	{
+		rx=x+(N-x);
+		ry=y-(N-x);
+		rightmark[ry+N]=0;
+		return;
+		
+	}
+	
+	
+}
 
 
 void process(int c)
 {
-	if(c>=N)
+	if(c==N)
 	{
-		for(int i=1;i<=N;i++) 
-		{
-			for(int j=i;j<=N;j++) 
-			{
-				if((tmpmark[i]-tmpmark[j])==(i-j)) return ;
-				
-			}
-				
-		}
-		
+	//	for(int i=1;i<=N;i++) 
+//		{
+//			 //not j=i j=i+1!!!!!!!! 
+//			for(int j=i+1;j<=N;j++) 
+//			{
+//				if(abs(tmpmark[i]-tmpmark[j])==abs(i-j)) return ;
+//				
+//			}
+//				
+//		}
+//		
 		result++;
 		if(result<=3)
 		{
-			for(int i=1;i<=N;i++)
-			{
-				printf("%d ",tmpmark[i]);
-			}
-			printf("\n");
+		 	for(int j=1;j<=N;j++)
+		 	{
+		 		printf("%d ",tmpmark[j]);
+		 	}
+		 	printf("\n");
 			
 		}
 		
 		return ;
-	} 
+	}
+	
+	//chen yu shucheng buduiying 
+//	if(c>3)
+//	{
+//		for(int i=1;i<c;i++) 
+//		{
+//			 //not j=i j=i+1!!!!!!!! 
+//			for(int j=i+1;j<=c;j++) 
+//			{
+//				if(abs(tmpmark[i]-tmpmark[j])==abs(i-j)) return ;
+//				
+//			}
+//				
+//		}
+//		
+//	}
+	
+	
+
 	
 	
 	
 	for(int i=1;i<=N;i++)
-	{
-		if(tmpset[i]!=1)
+	{	
+		
+		if(tmpset[i]!=1&&!leftsetf(i,c+1)&&!rightsetf(i,c+1))
 		{
 			//flag set
 			tmpset[i]=1;
 			
 			//mark level number
 			tmpmark[c+1]=i;
+			
+			leftmarkf(i,c+1);
+			rightmarkf(i,c+1);
 			
 			//next level
 			//printf("level:%d insert:%d\n",c,i);
@@ -94,8 +295,11 @@ void process(int c)
 			//unset flag
 			tmpset[i]=0;
 			
-			//for security
-			tmpmark[c+1]=0;
+			lefterasef(i,c+1);
+			righterasef(i,c+1);
+			
+//			//for security
+//			tmpmark[c+1]=0;
 			
 			
 		}	
@@ -140,8 +344,16 @@ int main()
 	 clock_running_end_time=clock();
 	 #endif	 
 	 
-	 //输出 output
-	 
+//	 //输出 output
+//	 for(int i=1;i<=3;i++)
+//	 {
+//	 	for(int j=1;j<=N;j++)
+//	 	{
+//	 		printf("%d ",resultmark[i][j]);
+//	 	}
+//	 	printf("\n");
+//	 }
+//	 
 	 printf("%d",result);
 	 
 
