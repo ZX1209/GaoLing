@@ -51,6 +51,84 @@ void test_end_sign()
 	printf("\n==test_end===\n");
 }
 
+int N,sum;
+vector<int> V;
+vector<int> Set;
+int flag=0;
+
+
+inline int Cp(int base,int n)
+{
+	int upbase=1;
+	int downbase=1;
+	
+	for(int i=(base-n+1);i<=base;i++)
+	{
+	    upbase*=i;
+	    //cout<<"upbase : "<<upbase<<endl;
+	}
+	
+	for(int i=1;i<=n;i++)
+	{
+	    downbase*=i;
+	    //cout<<"downbase : "<<downbase<<endl;
+	}
+	
+	return upbase/downbase;	
+}      
+
+
+
+void dloop(int n,int loopsum)
+{ 
+	if(!flag) 
+	{
+		if(loopsum<=sum)
+		{
+			if(n<=1)
+			{	 
+				if(!flag)
+				{	
+					int tmpint=sum-loopsum;
+					if(tmpint>0&&tmpint<=N&&Set[tmpint]==0)
+					{
+						for(int i=N;i>1;i--)
+						{
+							printf("%d ",V[i]);	
+						}
+						printf("%d ",tmpint);
+						flag=1;
+						
+					}
+				} 
+				return;
+					
+			}
+			else
+			{
+				int tmploopsum=0;
+				for(int i=1;i<=N;i++)
+				{
+					if(Set[i]==0)
+					{
+						Set[i]=1;
+						V[n]=i;
+						tmploopsum=loopsum+Cp(N-1,n-1)*i;
+						dloop(n-1,tmploopsum);
+						Set[i]=0;
+						
+					}
+					
+				}
+				return;
+				
+			}
+			
+		}
+		
+	}  
+	
+}
 
 
 
@@ -67,7 +145,9 @@ int main()
 	 #endif
 	 
 	 //init value
-	 
+	 scanf("%d %d",&N,&sum);
+	 V.resize(N+1);
+	 Set.resize(N+1); 
 	 
 	 
 	 //ÊäÈë input
@@ -89,6 +169,7 @@ int main()
 	 #endif
 	 
 	 //running program
+	 dloop(N,0);
 
 	 //detail time
 	 clock();
@@ -96,7 +177,7 @@ int main()
 	 clock_running_end_time=clock();
 	 #endif	 
 	 
-	 //Êä³ö output
+	 //Êä³ö outputh
 	 
 
 	 

@@ -52,6 +52,63 @@ void test_end_sign()
 }
 
 
+struct twoint
+{
+	int x;
+	int y;
+}; 
+
+int n;
+int m;
+
+vector<vector<int> > V;
+vector<vector<int> > answer;
+vector<vector<int> > record;
+
+vector<twoint> questions;
+int lin[1000001][2];
+int tmpwalk=0;
+
+int dir[4][2]={{-1,0},{1,0},{0,-1},{0,1}};
+
+void dfs(int x, int y)
+{
+	tmpwalk++;
+	lin[tmpwalk][0]=x;
+	lin[tmpwalk][1]=y;
+	record[x][y]=1;
+	
+	int tmp=V[x][y];
+	int tmpx=x;
+	int tmpy=y;
+	
+	for(int i=0;i<4;i++)
+	{
+		tmpx=x+dir[i][0];
+		tmpy=y+dir[i][1];
+		
+		
+		if(tmpx>=1&&tmpx<=n&&tmpy>=1&&tmpy<=n)
+		{
+			if(V[tmpx][tmpy]!=tmp&&record[tmpx][tmpy]!=1)//can
+			{
+				dfs(tmpx,tmpy);
+				
+		 	}
+		 	else
+		 	{
+		 		continue;
+		 		
+		 	}
+		}
+		else
+		{
+			continue;
+		}
+	}
+	//record[x][y]=0;
+}
+
 
 
 int main()
@@ -67,28 +124,81 @@ int main()
 	 #endif
 	 
 	 //init value
+	 scanf("%d %d",&n,&m);
+	 V.resize(n+1);
+	 answer.resize(n+1);
+	 questions.resize(m);
+	 record.resize(n+1);
+	 
+	 for(int i=0;i<=n;i++)
+	 {
+	 	V[i].resize(n+1);
+	 	answer[i].resize(n+1);
+	 	record[i].resize(n+1);
+	 }
 	 
 	 
 	 
 	 //ÊäÈë input
-	 
+	 for(int i=1;i<=n;i++)
+	 {
+	 	for(int j=1;j<=n;j++)
+	 	{
+	 		scanf("%1d",&V[i][j]);
+	 	}
+	 }
+	
+	for(int i=0;i<m;i++)
+	{
+		scanf("%d %d",&questions[i].x,&questions[i].y);
+	}
      //detail time
 	 #ifdef DETAILS
 	 clock_running_start_time=clock();
 	 #endif
 	 
+	 
 	 //test unit!!
 	 #ifdef DETAILS
 	 test_start_sign();
 	 
-	 //unit test
-
+	 for(int i=1;i<=n;i++)
+	 {
+	 	for(int j=1;j<=n;j++)
+	 	{
+	 		cout<<V[i][j]<<" ";
+	 	}
+	 	cout<<endl;
+	 }
 	 test_end_sign();
-	 
-	 
 	 #endif
 	 
 	 //running program
+	 for(int i=0;i<m;i++)
+	 {
+	 	if(answer[questions[i].x][questions[i].y]!=0) 
+	 	{
+	 		printf("%d\n",answer[questions[i].x][questions[i].y]);    
+		}
+		else
+		{
+			tmpwalk=0;
+			dfs(questions[i].x,questions[i].y);
+			for(int i=1;i<=tmpwalk;i++)
+			{
+				answer[lin[i][0]][lin[i][1]]=tmpwalk;
+			}
+			printf("%d\n",tmpwalk);
+				
+		} 
+	 }
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 
 	 //detail time
 	 clock();
