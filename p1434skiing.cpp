@@ -21,8 +21,6 @@ using namespace std;
 #define printInt(x) printf(#x " = %d",(x));
 #define printFloat(x) printf(#x " = %f",(x));
 #define br printf("\n");
-#define max(x,y) (x)>(y)?(x):(y)
-#define min(x,y) (x)>(y)?(y):(x) 
 
 clock_t clock_start_time;
 clock_t clock_end_time; 
@@ -55,6 +53,54 @@ void test_end_sign()
 }
 
 
+int R,C;
+vector<vector<int> > V;
+vector<vector<int> > A;
+int dis=0;
+int dir[4][2]={{-1,0},{1,0},{0,-1},{0,1}};
+int maxpoint[100000][2];
+int maxnum=1;
+
+void dfs(int x,int y,int step)
+{
+	if(step>dis)
+	{
+		dis=step;
+	}
+	
+	if(A[x][y]==0||A[x][y]<step)
+	{
+		int tmpx=x;
+		int tmpy=y;
+		
+		for(int i=0;i<4;i++)
+		{
+			tmpx=x+dir[i][0];
+			tmpy=y+dir[i][1];
+			
+			if(tmpx>0&&tmpx<=R&&tmpy>0&&tmpy<=C)
+			{
+				if(V[tmpx][tmpy]<V[x][y])
+				{
+					dfs(tmpx,tmpy,step+1);
+				}
+				
+			}
+			
+		}
+		A[x][y]=step;
+
+		
+	}
+	 
+	//printf("[debug] %3d %3d %3d %3d",A[x][y],)
+	//cout<<"[debug] "<<A[x][y]<<x<<" "<<y<<" "<<step<<endl; 
+	
+	return;
+	
+	
+}
+
 
 
 int main()
@@ -70,10 +116,29 @@ int main()
 	 #endif
 	 
 	 //init value
+	 int maxx;
+	 int maxy;
+	 int max;
 	 
 	 
 	 
 	 //ÊäÈë input
+	 scanf("%d %d",&R,&C);
+	 V.resize(R+1);
+	 A.resize(R+1);
+	 for(int i=1;i<=R;i++)
+	 {
+	 	V[i].resize(C+1);
+	 	A[i].resize(C+1);
+	 }
+	 
+	 for(int i=1;i<=R;i++)
+	 {
+	 	for(int j=1;j<=C;j++)
+	 	{
+	 		scanf("%d",&V[i][j]);
+	 	}
+	 }
 	 
      //detail time
 	 #ifdef DETAILS
@@ -85,6 +150,15 @@ int main()
 	 test_start_sign();
 	 
 	 //unit test
+	 for(int i=1;i<=R;i++)
+	 {
+	 	for(int j=1;j<=C;j++)
+	 	{
+	 		printf("%3d ",V[i][j]);
+	 	}
+	 	 br;
+	 }
+	 
 
 	 test_end_sign();
 	 
@@ -92,14 +166,66 @@ int main()
 	 #endif
 	 
 	 //running program
+	 max=V[1][1];
+ 	 maxnum=0;
+ 	 maxpoint[maxnum][0]=1;
+	 maxpoint[maxnum][1]=1;
+
+	 for(int i=1;i<=R;i++)
+	 {
+	 	for(int j=1;j<=C;j++)
+	 	{
+	 		if(max<V[i][j])
+	 		{
+	 			maxnum=0;
+	 			maxpoint[maxnum][0]=i;
+	 			maxpoint[maxnum][1]=j;
+	 			maxnum++;
+	 			max=V[i][j];
+	 		}
+	 		else if(max==V[i][j])
+	 		{
+	 			maxpoint[maxnum][0]=i;
+	 			maxpoint[maxnum][1]=j;
+	 			maxnum++;
+	 			
+	 		}
+	 		
+	 	}
+	 	
+	 }
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 for(int i=0;i<maxnum;i++)
+	 {
+	 	dfs(maxpoint[i][0],maxpoint[i][1],1);	 	
+	 }
+	 
+	 
+	 
 
 	 //detail time
 	 clock();
 	 #ifdef DETAILS
 	 clock_running_end_time=clock();
+	 
+	 for(int i=1;i<=R;i++)
+	 {
+	 	for(int j=1;j<=C;j++)
+	 	{
+	 		printf("%3d ",A[i][j]);
+	 	}
+	 	 br;
+	 }
 	 #endif	 
 	 
 	 //Êä³ö output
+	 printf("%d",dis);
 	 
 
 	 
